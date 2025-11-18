@@ -1,0 +1,29 @@
+def poly_encrypt(plaintext, key):
+    plaintext = plaintext
+    key = key.lower()
+    cipher = ""
+    k_len = len(key)
+    j = 0
+
+    for ch in plaintext:
+        if ch.isalpha():
+            shift = ord(key[j % k_len]) - ord('a')
+
+            if ch.islower():
+                cipher += chr((ord(ch) - ord('a') + shift) % 26 + ord('a'))
+            else:
+                cipher += chr((ord(ch) - ord('A') + shift) % 26 + ord('A'))
+
+            j += 1
+        else:
+            cipher += ch
+
+    return cipher
+
+
+# Main Program
+plaintext = input("Enter plaintext: ")
+key = input("Enter key: ")
+
+encrypted = poly_encrypt(plaintext, key)
+print("Encrypted text:", encrypted)
