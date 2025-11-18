@@ -1,0 +1,19 @@
+def caesar_cipher(text, key):
+    result = ""
+
+    for char in text:
+        if char.isalpha():
+            base = 'a' if char.islower() else 'A'
+            result += chr((ord(char) - ord(base) + key) % 26 + ord(base))
+        else:
+            result += char
+    return result
+
+text = input("Enter a message: ")
+key = int(input("Enter key (1-25): "))
+
+if 1 <= key <= 25:
+    encrypted = caesar_cipher(text, key)
+    print("Encrypted message:", encrypted)
+else:
+    print("Key must be between 1 and 25")
