@@ -1,0 +1,26 @@
+def monoalphabetic_encrypt(text, key):
+    alphabet = "abcdefghijklmnopqrstuvwxyz"
+    cipher_text = ""
+    text = text.lower()
+
+    for char in text:
+        if char.isalpha():
+            index = alphabet.index(char)
+            cipher_text += key[index]
+        else:
+            cipher_text += char
+    return cipher_text
+
+# MAIN PROGRAM
+key = input("Enter 26-letter substitution key: ")
+
+# Validate key
+if len(key) != 26 or not key.isalpha():
+    print("Invalid key! Key must contain exactly 26 alphabetic characters.")
+else:
+    key = key.lower()
+    
+    plaintext = input("Enter plaintext: ")
+    encrypted_msg = monoalphabetic_encrypt(plaintext, key)
+    
+    print("Encrypted message:", encrypted_msg)
