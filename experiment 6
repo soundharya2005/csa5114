@@ -1,0 +1,57 @@
+# Affine Cipher Breaker using frequency assumptions
+
+from math import gcd
+
+# Function to find modular inverse
+def mod_inverse(a, m):
+    for x in range(m):
+        if (a * x) % m == 1:
+            return x
+    return None
+
+# Function to decrypt
+def affine_decrypt(ciphertext, a, b):
+    plaintext = ""
+    a_inv = mod_inverse(a, 26)
+    if a_inv is None:
+        return "No Modular Inverse. Invalid 'a'"
+
+    for char in ciphertext:
+        if char.isalpha():
+            C = ord(char.upper()) - ord('A')
+            P = (a_inv * (C - b)) % 26
+            plaintext += chr(P + ord('A'))
+        else:
+            plaintext += char
+    return plaintext
+
+
+# Given Conditions
+# Most frequent ciphertext letter 'B' assumed to map to plaintext 'E'
+# Second most frequent 'U' assumed to map to plaintext 'T'
+C1, P1 = ord('B') - 65, ord('E') - 65
+C2, P2 = ord('U') - 65, ord('T') - 65
+
+# Solve for a and b equations:
+# P1 = (a*C1 + b) mod 26
+# P2 = (a*C2 + b) mod 26
+
+# So: (P2 - P1) = a*(C2 - C1)
+lhs = (P2 - P1) % 26
+rhs = (C2 - C1) % 26
+
+a = None
+for x in range(26):
+    if (x * rhs) % 26 == lhs and gcd(x, 26) == 1:
+        a = x
+        break
+
+if a is None:
+    print("Could not determine 'a'")
+else:
+    b = (P1 - a * C1) % 26
+    print(f"Solved key values: a = {a}, b = {b}")
+
+    ciphertext = input("Enter ciphertext to decrypt: ")
+    result = affine_decrypt(ciphertext, a, b)
+    print("Decrypted Plaintext:", result)
